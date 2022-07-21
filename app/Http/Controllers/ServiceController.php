@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class ServiceController extends Controller
 {
@@ -15,6 +17,15 @@ class ServiceController extends Controller
     public function index()
     {
         //
+        $user = Auth::user();
+        if($user){
+            $service= Service::where('user_id', $user->id)->get();
+            if(count($service)>0){
+                return response()->json(['status'=>'success','message'=> 'Service Found','data'=>$service]);
+            }
+            return response()-> json(['status'=>'fail','message'=> 'Service is not found']);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -36,6 +47,33 @@ class ServiceController extends Controller
     public function store(Request $request)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            $validator= Validator::make($request->all(), [
+                'name' => 'required',
+                'user_id'=> 'required',
+                'vendor_id'=> 'required',
+                'price'=>'required',
+    
+            ]);
+    
+            if($validator ->fails()){
+                return response() -> json(['status' => 'fail','Validation_errors'=> $validator->error()]);
+                
+            }
+    
+            $data = $request->all();
+            $data['user_id'] = auth()->id();
+    
+            $service = Service::create($data);
+            if($service){
+                return response()->json(['status'=>'success','message'=> 'Service stored successfully','data'=>$service]);
+            }
+            return response()-> json(['status'=>'fail','message'=> 'Service store failed']);
+
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**

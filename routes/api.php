@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\VendorController;
+use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +27,16 @@ Route::post('login', [UserController::class,'login']);
 
 Route::middleware('auth:api')->group(function(){
     Route::get('user',[UserController::class,'userDetail']);
+
+    //vendor store route
+    Route::post('vendorstore',[VendorController::class,'store']);
+    Route::get('vendorindex',[VendorController::class,'index']);
+    //service store route
+    Route::post('servicestore',[ServiceController::class,'store']);
+    Route::get('serviceindex',[ServiceController::class,'index']);
+    //review store route
+    Route::post('reviewstore',[ReviewController::class,'store']);
+    Route::get('reviewindex',[ReviewController::class,'index']);
 
 });
 

@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class VendorController extends Controller
 {
@@ -15,6 +17,15 @@ class VendorController extends Controller
     public function index()
     {
         //
+        $user = Auth::user();
+        if($user){
+            $vendor= Vendor::where('user_id', $user->id)->get();
+            if(count($vendor)>0){
+                return response()->json(['status'=>'success','message'=> 'Vendor Found','data'=>$vendor]);
+            }
+            return response()-> json(['status'=>'fail','message'=> 'Vendor is not found']);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -36,6 +47,33 @@ class VendorController extends Controller
     public function store(Request $request)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            $validator= Validator::make($request->all(), [
+                'name' => 'required',
+                'email'=>'required|email',
+                'user_id'=> 'required',
+    
+            ]);
+    
+            if($validator ->fails()){
+                return response() -> json(['status' => 'fail','Validation_errors'=> $validator->error()]);
+            }
+    
+            $data = $request->all();
+            $data['user_id'] = auth()->id();
+    
+            $vendor= Vendor::create($data);
+            if($vendor){
+                return response()->json(['status'=>'success','message'=> 'Vendor stored successfully','data'=>$vendor]);
+            }
+            return response()-> json(['status'=>'fail','message'=> 'Vendor store failed']);
+
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
+        
+
     }
 
     /**

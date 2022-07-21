@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class ReviewController extends Controller
 {
@@ -36,6 +38,35 @@ class ReviewController extends Controller
     public function store(Request $request)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            $validator= Validator::make($request->all(), [
+
+                'service_id' => 'required',
+                'user_id'=>'required',
+                'review'=>'required',
+                'hide'=>'required',
+    
+            ]);
+    
+            if($validator ->fails()){
+                return response() -> json(['status' => 'fail','Validation_errors'=> $validator->error()]);
+                
+            }
+    
+            $data = $request->all();
+            $data['user_id'] = auth()->id();
+    
+            $review = Review::create($data);
+            if($review){
+                return response()->json(['status'=>'success','message'=> 'Review stored successfully','data'=>$review]);
+            }
+            return response()-> json(['status'=>'fail','message'=> 'Review store failed']);
+
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
+        
     }
 
     /**
