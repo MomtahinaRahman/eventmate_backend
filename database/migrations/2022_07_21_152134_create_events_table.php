@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('location');
             $table->integer('budget');
             $table->integer('guest')->nullable();
-            $table->string('catagories');
+            $table->string('categories');
             $table->string('cancel');
 
             $table->timestamps();
