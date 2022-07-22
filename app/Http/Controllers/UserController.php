@@ -47,7 +47,7 @@ class UserController extends Controller
         ]);
 
         if($validator ->fails()){
-            return response() -> json(['status' => 'fail','validation_errors'=> $validator->error()]);
+            return response()-> json(['status' => 'fail','validation_errors'=> $validator->error()]);
         }
         //login
         if(Auth::attempt(['email'=> $request->email, 'password' => $request->password])){
