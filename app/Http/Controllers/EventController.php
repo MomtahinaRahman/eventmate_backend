@@ -46,8 +46,7 @@ class EventController extends Controller
                 'time'=>'required',
                 'location'=>'required',
                 'budget'=>'required',
-                'guest'=>'required',
-                'catagories'=>'required',
+                'categories'=>'required',
                 'cancel'=>'required',
 
     
