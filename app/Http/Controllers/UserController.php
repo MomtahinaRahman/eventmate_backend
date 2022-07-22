@@ -47,7 +47,7 @@ class UserController extends Controller
         ]);
 
         if($validator ->fails()){
-            return response -> json(['status' => 'fail','validation_errors'=> $validator->error()]);
+            return response() -> json(['status' => 'fail','validation_errors'=> $validator->error()]);
         }
         //login
         if(Auth::attempt(['email'=> $request->email, 'password' => $request->password])){
@@ -68,6 +68,23 @@ class UserController extends Controller
             return response()->json(['status'=>'success','user'=> $user]);
         }
         return response()->json(['status'=>'fail','message'=>'User not found']);
+    }
+
+    public function logout(Request $request)
+    {
+        $response = array();
+        if (Auth::check()) {
+            
+            Auth::user()->token()->revoke();
+            $response['error'] = 0;
+            $response['message'] = "Successfully logged out.";
+            return response()->json($response);
+        }
+        else{
+            $response['error'] = 1;
+            $response['message'] = "You are not logged in.";
+            return response()->json($response);
+        }
     }
 
     //function login(Request $request)
