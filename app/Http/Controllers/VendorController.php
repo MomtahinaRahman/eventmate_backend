@@ -52,8 +52,6 @@ class VendorController extends Controller
         if($authUser){
             $validator= Validator::make($request->all(), [
                 'name' => 'required',
-                'email'=>'required|email',
-                'user_id'=> 'required',
     
             ]);
     

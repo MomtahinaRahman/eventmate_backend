@@ -22,7 +22,7 @@ use App\Http\Controllers\ReviewController;
 //    return $request->user();
 //});
 
-Route::post('register', [UserController::class,'register']);
+Route::post('signup', [UserController::class,'register']);
 Route::post('login', [UserController::class,'login']);
 Route::middleware('auth:api')->post('/logout',[UserController::class,('logout')])->name('logout');
 
@@ -30,7 +30,7 @@ Route::middleware('auth:api')->group(function(){
     Route::get('user',[UserController::class,'userDetail']);
 
     //vendor store route
-    Route::post('vendorstore',[VendorController::class,'store']);
+    Route::post('/vendorstore',[VendorController::class,'store']);
     Route::get('vendorindex',[VendorController::class,'index']);
     //service store route
     Route::post('servicestore',[ServiceController::class,'store']);
