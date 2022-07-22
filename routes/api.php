@@ -37,6 +37,10 @@ Route::middleware('auth:api')->group(function(){
     //review store route
     Route::post('reviewstore',[ReviewController::class,'store']);
     Route::get('reviewindex',[ReviewController::class,'index']);
+    //event store route
+    Route::post('eventstore',[EventController::class,'store']);
+    Route::get('eventindex',[EventController::class,'index']);
+
 
 });
 
