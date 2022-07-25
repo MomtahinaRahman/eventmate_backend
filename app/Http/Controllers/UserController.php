@@ -70,6 +70,22 @@ class UserController extends Controller
         return response()->json(['status'=>'fail','message'=>'User not found']);
     }
 
+    protected function create(array $data)
+    {
+        $user=User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+
+        ]);
+        
+        /*foreach (Admin::all() as $admin){
+            $admin-> notify(new RepliedToThread($user));
+        }*/
+
+        return $user;
+    }
+
     //function login(Request $request)
     //{
         
