@@ -85,6 +85,22 @@ class UserController extends Controller
             $response['message'] = "You are not logged in.";
             return response()->json($response);
         }
+
+    }
+    protected function create(array $data)
+    {
+        $user=User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['password']),
+
+        ]);
+        
+        /*foreach (Admin::all() as $admin){
+            $admin-> notify(new RepliedToThread($user));
+        }*/
+
+        return $user;
     }
 
     //function login(Request $request)

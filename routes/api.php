@@ -6,6 +6,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\EventController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +40,10 @@ Route::middleware('auth:api')->group(function(){
     //review store route
     Route::post('reviewstore',[ReviewController::class,'store']);
     Route::get('reviewindex',[ReviewController::class,'index']);
+    //event store route
+    Route::post('eventstore',[EventController::class,'store']);
+    Route::get('eventindex',[EventController::class,'index']);
+
 
 });
 
