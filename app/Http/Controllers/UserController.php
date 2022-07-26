@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\OrderPlaced;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -53,7 +55,7 @@ class UserController extends Controller
         if(Auth::attempt(['email'=> $request->email, 'password' => $request->password])){
             $user = Auth::user();
             $token = $user-> createToken('usertoken')->accessToken;
-
+            
             return response()->json(['status'=>'success','login'=> true, 'token'=> $token,'data'=> $user]);
         }
         else{
@@ -87,21 +89,46 @@ class UserController extends Controller
         }
 
     }
-    protected function create(array $data)
+
+    public function noti()
     {
-        $user=User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-
-        ]);
+      // if (Auth::check()) {
+      //       $user = Auth::user();
+      //     return response()->json($user);
+            
+      //   }
+      //   else{
+      //       $response['error'] = 1;
+      //       $response['message'] = "You are not logged in.";
+      //       return response()->json($response);
+      // }
         
-        /*foreach (Admin::all() as $admin){
-            $admin-> notify(new RepliedToThread($user));
-        }*/
+        $user = User::findOrFail(2);
+        $user-> notify(new OrderPlaced($user));
+        // dd("done");
+        // return response()->json($user);
 
-        return $user;
+        // notify(new OrderPlaced($user));
+        // event(new MyEvent('hello world'));
     }
+
+    
+    // notification
+    // protected function create(array $data)
+    // {
+    //     $user=User::create([
+    //         'name' => $data['name'],
+    //         'email' => $data['email'],
+    //         'password' => bcrypt($data['password']),
+
+    //     ]);
+        
+    //     /*foreach (Admin::all() as $admin){
+    //         $admin-> notify(new RepliedToThread($user));
+    //     }*/
+
+    //     return $user;
+    // }
 
     //function login(Request $request)
     //{

@@ -6,20 +6,20 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
-
-class OrderPlaced extends Notification
+use Illuminate\Notifications\Messages\BroadcastMessage;
+class OrderPlaced extends Notification implements ShouldQueue
 {
     use Queueable;
-
+    private $order;
     /**
      * Create a new notification instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($order)
     {
         //
-        $this->user= $user;
+        $this->oder= $order;
     }
 
     /**
@@ -30,7 +30,8 @@ class OrderPlaced extends Notification
      */
     public function via($notifiable)
     {
-        return ['database','broadcast'];
+        // return ['database','broadcast'];
+        return ['database', 'broadcast'];
     }
 
     /**
@@ -44,19 +45,32 @@ class OrderPlaced extends Notification
     {
         return [
             //'repliedTime'=>Carbon::now()
-            'user'=>$this->user,
-            'admin'=>$notifiable
+            'order'=>$this->order,
+            'vendor'=>$notifiable,
+            'data'=>"helloooo"
         ];
     }
 
+    // public function toBroadcast($notifiable)
+    // {
+    //     return [
+    //         //'repliedTime'=>Carbon::now()
+    //         'user'=>$this->user,
+    //         'vendor'=>$notifiable,
+    //         'data'=>"helloooo"
+    //     ];
+    // }
+
     public function toBroadcast($notifiable)
     {
-        return [
-            //'repliedTime'=>Carbon::now()
-            'user'=>$this->user,
-            'admin'=>$notifiable
-        ];
+        return new BroadcastMessage($this->toArray($notifiable));
     }
+
+    public function broadcastType()
+    {
+        return 'new-order';
+    }
+
     //public function toMail($notifiable)
     //{
     //    return (new MailMessage)
@@ -71,10 +85,47 @@ class OrderPlaced extends Notification
      * @param  mixed  $notifiable
      * @return array
      */
+    // public function toArray($notifiable)
+    // {
+    //     return [
+    //         //
+    //     ];
+    // }
+
+    // public function toArray($notifiable)
+    // {
+    //      return [
+    //         'post' => [
+    //             'id' => $this->comment->post_id,
+    //         ],
+    //         'author' => [
+    //             'id' => $this->comment->user_id,
+    //             'first_name' => $this->comment->user->first_name,
+    //             'last_name' => $this->comment-user->last_name,
+    //         ],
+    //         'comment' => [
+    //             'id' => $this->comment->id,
+    //             'body' => $this->comment->body,
+    //             'commented_at' => $this->comment->commented_at,
+    //         ],
+    //     ];
+    //  }
     public function toArray($notifiable)
     {
-        return [
-            //
+         return [
+            'post' => [
+                'id' => '01',
+            ],
+            'author' => [
+                'id' => '01',
+                'first_name' => 'mahir',
+                'last_name' => 'sadman',
+            ],
+            'comment' => [
+                'id' => '01',
+                'body' => 'new order placed',
+                'commented_at' => '01',
+            ],
         ];
-    }
+     }
 }

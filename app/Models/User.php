@@ -43,14 +43,22 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    /**
+     * The channels the user receives notification broadcasts on.
+     *
+     * @return string
+    */
+    public function receivesBroadcastNotificationsOn()
+    {
+        return 'App.User.' . $this->id;
+    }
+
     public function vendor()
     {
         return $this-> hasMany(Vendor::class);
 
     }
-    public function service()
-    {
-        return $this-> hasMany(Service::class);
 
-    }
+
+
 }

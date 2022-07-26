@@ -23,7 +23,7 @@ class VendorController extends Controller
             if(count($vendor)>0){
                 return response()->json(['status'=>'success','message'=> 'Vendor Found','data'=>$vendor]);
             }
-            return response()-> json(['status'=>'fail','message'=> 'Vendor is not found']);
+            return response()-> json(['status'=>'fail','message'=> 'Vendor not found']);
         }
         return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
@@ -82,7 +82,7 @@ class VendorController extends Controller
      */
     public function show(Vendor $vendor)
     {
-        //
+        $vendor=Vendor::find($vendor->vendor_id);
     }
 
     /**
