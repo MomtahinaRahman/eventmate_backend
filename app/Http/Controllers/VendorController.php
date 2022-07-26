@@ -82,7 +82,15 @@ class VendorController extends Controller
      */
     public function show(Vendor $vendor)
     {
-        $vendor=Vendor::find($vendor->vendor_id);
+        //$vendor=Vendor::find($vendor->vendor_id);
+        $authUser = Auth::user();
+
+        if($authUser){
+            
+            return response()-> json(['status'=>'success','message'=> 'Vendor found!', 'data'=>$vendor]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
+
     }
 
     /**
@@ -94,6 +102,13 @@ class VendorController extends Controller
     public function edit(Vendor $vendor)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            return response()-> json(['status'=>'success','message'=> 'Vendor found!', 'data'=>$vendor]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
+
     }
 
     /**
@@ -105,7 +120,21 @@ class VendorController extends Controller
      */
     public function update(Request $request, Vendor $vendor)
     {
-        //
+        //check auth,validator
+        $authUser = Auth::user();
+
+        if($authUser){
+            $validator= Validator::make($request->all(), [
+                'name' => 'required',
+    
+            ]);
+            if($validator ->fails()){
+                return response() -> json(['status' => 'fail','Validation_errors'=> $validator->error()]);
+            }
+            $vendor->update($request->all());
+            return response()-> json(['status'=>'success','message'=> 'Vendor updated!', 'data'=>$vendor]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -116,6 +145,14 @@ class VendorController extends Controller
      */
     public function destroy(Vendor $vendor)
     {
-        //
+        //auth
+        $authUser = Auth::user();
+
+        if($authUser){
+            $vendor->delete();
+            return response()-> json(['status'=>'success','message'=> 'Vendor deleted!', 'data'=>$vendor]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
+
     }
 }

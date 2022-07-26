@@ -78,6 +78,13 @@ class ReviewController extends Controller
     public function show(Review $review)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            
+            return response()-> json(['status'=>'success','message'=> 'Service found!', 'data'=>$review]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -89,6 +96,12 @@ class ReviewController extends Controller
     public function edit(Review $review)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            return response()-> json(['status'=>'success','message'=> 'Service found!', 'data'=>$review]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -101,6 +114,24 @@ class ReviewController extends Controller
     public function update(Request $request, Review $review)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            $validator= Validator::make($request->all(), [
+                'service_id' => 'required',
+                'user_id'=>'required',
+                'review'=>'required',
+                'hide'=>'required',
+
+    
+            ]);
+            if($validator ->fails()){
+                return response() -> json(['status' => 'fail','Validation_errors'=> $validator->error()]);
+            }
+            $review->update($request->all());
+            return response()-> json(['status'=>'success','message'=> 'Review updated!', 'data'=>$review]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -112,5 +143,12 @@ class ReviewController extends Controller
     public function destroy(Review $review)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            $review->delete();
+            return response()-> json(['status'=>'success','message'=> 'Service deleted!', 'data'=>$review]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 }

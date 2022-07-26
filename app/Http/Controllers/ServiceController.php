@@ -85,6 +85,13 @@ class ServiceController extends Controller
     public function show(Service $service)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            
+            return response()-> json(['status'=>'success','message'=> 'Service found!', 'data'=>$service]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -96,6 +103,12 @@ class ServiceController extends Controller
     public function edit(Service $service)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            return response()-> json(['status'=>'success','message'=> 'Service found!', 'data'=>$service]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -108,6 +121,23 @@ class ServiceController extends Controller
     public function update(Request $request, Service $service)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            $validator= Validator::make($request->all(), [
+                'name' => 'required',
+                'user_id'=> 'required',
+                'vendor_id'=> 'required',
+                'price'=>'required',
+    
+            ]);
+            if($validator ->fails()){
+                return response() -> json(['status' => 'fail','Validation_errors'=> $validator->error()]);
+            }
+            $service->update($request->all());
+            return response()-> json(['status'=>'success','message'=> 'Service updated!', 'data'=>$service]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -119,5 +149,12 @@ class ServiceController extends Controller
     public function destroy(Service $service)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            $service->delete();
+            return response()-> json(['status'=>'success','message'=> 'Service deleted!', 'data'=>$service]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 }

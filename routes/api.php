@@ -32,17 +32,23 @@ Route::middleware('auth:api')->group(function(){
     Route::get('user',[UserController::class,'userDetail']);
 
     //vendor store route
-    Route::post('/vendorstore',[VendorController::class,'store']);
-    Route::get('vendorindex',[VendorController::class,'index']);
+    Route::resource('vendors', VendorController::class);
+
+    //Route::post('/vendorstore',[VendorController::class,'store']);
+    //Route::get('vendorindex',[VendorController::class,'index']);
+    //Route::post('/vendorshow',[VendorController::class,'show']);
     //service store route
-    Route::post('servicestore',[ServiceController::class,'store']);
-    Route::get('serviceindex',[ServiceController::class,'index']);
+    Route::resource('services', ServiceController::class);
+    //Route::post('servicestore',[ServiceController::class,'store']);
+    //Route::get('serviceindex',[ServiceController::class,'index']);
     //review store route
-    Route::post('reviewstore',[ReviewController::class,'store']);
-    Route::get('reviewindex',[ReviewController::class,'index']);
+    Route::resource('reviews', ReviewController::class);
+    //Route::post('reviewstore',[ReviewController::class,'store']);
+    //Route::get('reviewindex',[ReviewController::class,'index']);
     //event store route
-    Route::post('eventstore',[EventController::class,'store']);
-    Route::get('eventindex',[EventController::class,'index']);
+    Route::resource('events', EventController::class);
+    //Route::post('eventstore',[EventController::class,'store']);
+    //Route::get('eventindex',[EventController::class,'index']);
 
 
 });

@@ -81,6 +81,13 @@ class EventController extends Controller
     public function show(Event $event)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            
+            return response()-> json(['status'=>'success','message'=> 'Service found!', 'data'=>$event]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -92,6 +99,12 @@ class EventController extends Controller
     public function edit(Event $event)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            return response()-> json(['status'=>'success','message'=> 'Service found!', 'data'=>$event]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -104,6 +117,27 @@ class EventController extends Controller
     public function update(Request $request, Event $event)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            $validator= Validator::make($request->all(), [
+                'user_id'=>'required',
+                'date'=>'required',
+                'time'=>'required',
+                'location'=>'required',
+                'budget'=>'required',
+                'categories'=>'required',
+                'cancel'=>'required',
+                
+    
+            ]);
+            if($validator ->fails()){
+                return response() -> json(['status' => 'fail','Validation_errors'=> $validator->error()]);
+            }
+            $event->update($request->all());
+            return response()-> json(['status'=>'success','message'=> 'Review updated!', 'data'=>$event]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -115,5 +149,12 @@ class EventController extends Controller
     public function destroy(Event $event)
     {
         //
+        $authUser = Auth::user();
+
+        if($authUser){
+            $event->delete();
+            return response()-> json(['status'=>'success','message'=> 'Event deleted!', 'data'=>$event]);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 }
