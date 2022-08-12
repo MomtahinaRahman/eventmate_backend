@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Decoration_order;
+use App\Models\Photography_order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
-class Decoration_orderController extends Controller
+class Photography_orderController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -44,7 +44,7 @@ class Decoration_orderController extends Controller
             $validator= Validator::make($request->all(), [
 
                 'event_id'=>'required',
-                'service_id'=>'required',
+                'photography_service_id'=>'required',
                 
     
             ]);
@@ -57,11 +57,11 @@ class Decoration_orderController extends Controller
             $data = $request->all();
             $data['user_id'] = auth()->id();
     
-            $decoration_order = Decoration_order::create($data);
-            if($decoration_order){
-                return response()->json(['status'=>'success','message'=> 'Decoration Order stored successfully','data'=>$decoration_order]);
+            $photography_order = Photography_order::create($data);
+            if($photography_order){
+                return response()->json(['status'=>'success','message'=> 'Photography Order stored successfully','data'=>$photography_order]);
             }
-            return response()-> json(['status'=>'fail','message'=> 'Decoration Order store failed']);
+            return response()-> json(['status'=>'fail','message'=> 'Photography Order store failed']);
 
         }
         return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
@@ -70,17 +70,17 @@ class Decoration_orderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Decoration_order  $decoration_order
+     * @param  \App\Models\Photography_order  $photography_order
      * @return \Illuminate\Http\Response
      */
-    public function show(Decoration_order $decoration_order)
+    public function show(Photography_order $photography_order)
     {
         //
         $authUser = Auth::user();
 
         if($authUser){
             
-            return response()-> json(['status'=>'success','message'=> 'Decoration Order found!', 'data'=>$decoration_order]);
+            return response()-> json(['status'=>'success','message'=> 'Photography Order found!', 'data'=>$photography_order]);
         }
         return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
@@ -88,16 +88,16 @@ class Decoration_orderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Decoration_order  $decoration_order
+     * @param  \App\Models\Photography_order  $photography_order
      * @return \Illuminate\Http\Response
      */
-    public function edit(Decoration_order $decoration_order)
+    public function edit(Photography_order $photography_order)
     {
         //
         $authUser = Auth::user();
 
         if($authUser){
-            return response()-> json(['status'=>'success','message'=> 'Decoration Order found!', 'data'=>$decoration_order]);
+            return response()-> json(['status'=>'success','message'=> 'Photography Order found!', 'data'=>$photography_order]);
         }
         return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
@@ -106,25 +106,25 @@ class Decoration_orderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Decoration_order  $decoration_order
+     * @param  \App\Models\Photography_order  $photography_order
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Decoration_order $decoration_order)
+    public function update(Request $request, Photography_order $photography_order)
     {
         //
         $authUser = Auth::user();
 
         if($authUser){
             $validator= Validator::make($request->all(), [
-                'event_id'=>'required',
-                'service_id'=>'required',
+                'event_id'=> 'required',
+                'photography_service_id'=>'required',
     
             ]);
             if($validator ->fails()){
                 return response() -> json(['status' => 'fail','Validation_errors'=> $validator->error()]);
             }
-            $decoration_order->update($request->all());
-            return response()-> json(['status'=>'success','message'=> 'Decoration Order updated!', 'data'=>$decoration_order]);
+            $photography_order->update($request->all());
+            return response()-> json(['status'=>'success','message'=> 'Photography Order updated!', 'data'=>$photography_order]);
         }
         return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
@@ -132,17 +132,17 @@ class Decoration_orderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Decoration_order  $decoration_order
+     * @param  \App\Models\Photography_order  $photography_order
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Decoration_order $decoration_order)
+    public function destroy(Photography_order $photography_order)
     {
         //
         $authUser = Auth::user();
 
         if($authUser){
-            $decoration_order->delete();
-            return response()-> json(['status'=>'success','message'=> 'Decoration Order deleted!', 'data'=>$decoration_order]);
+            $photography_order->delete();
+            return response()-> json(['status'=>'success','message'=> 'Photography Order deleted!', 'data'=>$photography_order]);
         }
         return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }

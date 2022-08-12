@@ -7,6 +7,11 @@ use App\Http\Controllers\VendorController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\Photography_serviceController;
+use App\Http\Controllers\Photography_orderController;
+use App\Http\Controllers\Music_serviceController;
+use App\Http\Controllers\Music_orderController;
+use App\Http\Controllers\Decoration_orderController;
 
 
 /*
@@ -49,7 +54,13 @@ Route::middleware('auth:api')->group(function(){
     Route::resource('events', EventController::class);
     //Route::post('eventstore',[EventController::class,'store']);
     //Route::get('eventindex',[EventController::class,'index']);
+    
+    Route::resource('decoration_orders', Decoration_orderController::class);
 
+    Route::resource('photography_services', Photography_serviceController::class);
+    Route::resource('photography_orders', Photography_orderController::class);
+    Route::resource('music_services', Music_serviceController::class);
+    Route::resource('music_orders', Music_orderController::class);
 
 });
 

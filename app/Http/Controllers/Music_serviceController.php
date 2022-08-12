@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Decoration_order;
+use App\Models\Music_service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
-class Decoration_orderController extends Controller
+class Music_serviceController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -17,6 +17,15 @@ class Decoration_orderController extends Controller
     public function index()
     {
         //
+        $user = Auth::user();
+        if($user){
+            $music_service= Music_Service::where('user_id', $user->id)->get();
+            if(count($music_service)>0){
+                return response()->json(['status'=>'success','message'=> 'Music Service Found','data'=>$music_service]);
+            }
+            return response()-> json(['status'=>'fail','message'=> 'Music Service is not found']);
+        }
+        return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
 
     /**
@@ -42,10 +51,8 @@ class Decoration_orderController extends Controller
 
         if($authUser){
             $validator= Validator::make($request->all(), [
-
-                'event_id'=>'required',
-                'service_id'=>'required',
-                
+                'vendor_id'=> 'required',
+                'price'=>'required',
     
             ]);
     
@@ -57,11 +64,11 @@ class Decoration_orderController extends Controller
             $data = $request->all();
             $data['user_id'] = auth()->id();
     
-            $decoration_order = Decoration_order::create($data);
-            if($decoration_order){
-                return response()->json(['status'=>'success','message'=> 'Decoration Order stored successfully','data'=>$decoration_order]);
+            $music_service = Music_Service::create($data);
+            if($music_service){
+                return response()->json(['status'=>'success','message'=> 'Music Service stored successfully','data'=>$music_service]);
             }
-            return response()-> json(['status'=>'fail','message'=> 'Decoration Order store failed']);
+            return response()-> json(['status'=>'fail','message'=> 'Music Service store failed']);
 
         }
         return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
@@ -70,17 +77,17 @@ class Decoration_orderController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Decoration_order  $decoration_order
+     * @param  \App\Models\Music_service  $music_service
      * @return \Illuminate\Http\Response
      */
-    public function show(Decoration_order $decoration_order)
+    public function show(Music_service $music_service)
     {
         //
         $authUser = Auth::user();
 
         if($authUser){
             
-            return response()-> json(['status'=>'success','message'=> 'Decoration Order found!', 'data'=>$decoration_order]);
+            return response()-> json(['status'=>'success','message'=> 'Music Service found!', 'data'=>$music_service]);
         }
         return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
@@ -88,16 +95,16 @@ class Decoration_orderController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Decoration_order  $decoration_order
+     * @param  \App\Models\Music_service  $music_service
      * @return \Illuminate\Http\Response
      */
-    public function edit(Decoration_order $decoration_order)
+    public function edit(Music_service $music_service)
     {
         //
         $authUser = Auth::user();
 
         if($authUser){
-            return response()-> json(['status'=>'success','message'=> 'Decoration Order found!', 'data'=>$decoration_order]);
+            return response()-> json(['status'=>'success','message'=> 'Music Service found!', 'data'=>$music_service]);
         }
         return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
@@ -106,25 +113,25 @@ class Decoration_orderController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Decoration_order  $decoration_order
+     * @param  \App\Models\Music_service  $music_service
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Decoration_order $decoration_order)
+    public function update(Request $request, Music_service $music_service)
     {
         //
         $authUser = Auth::user();
 
         if($authUser){
             $validator= Validator::make($request->all(), [
-                'event_id'=>'required',
-                'service_id'=>'required',
+                'vendor_id'=> 'required',
+                'price'=>'required',
     
             ]);
             if($validator ->fails()){
                 return response() -> json(['status' => 'fail','Validation_errors'=> $validator->error()]);
             }
-            $decoration_order->update($request->all());
-            return response()-> json(['status'=>'success','message'=> 'Decoration Order updated!', 'data'=>$decoration_order]);
+            $music_service->update($request->all());
+            return response()-> json(['status'=>'success','message'=> 'Music Service updated!', 'data'=>$music_service]);
         }
         return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
@@ -132,17 +139,17 @@ class Decoration_orderController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Decoration_order  $decoration_order
+     * @param  \App\Models\Music_service  $music_service
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Decoration_order $decoration_order)
+    public function destroy(Music_service $music_service)
     {
         //
         $authUser = Auth::user();
 
         if($authUser){
-            $decoration_order->delete();
-            return response()-> json(['status'=>'success','message'=> 'Decoration Order deleted!', 'data'=>$decoration_order]);
+            $music_service->delete();
+            return response()-> json(['status'=>'success','message'=> 'Music Service deleted!', 'data'=>$music_service]);
         }
         return response()-> json(['status'=>'fail','message'=> 'Unauthorised!'], 403);
     }
