@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\MailController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,4 +22,5 @@ Route::get('/login', function () {
     return view('login');
 });
 Route::get('noti',[UserController::class,'noti']);
+Route::get('/sendmail',[MailController::class,'sendMail']);
 
