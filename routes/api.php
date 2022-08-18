@@ -12,7 +12,12 @@ use App\Http\Controllers\Photography_orderController;
 use App\Http\Controllers\Music_serviceController;
 use App\Http\Controllers\Music_orderController;
 use App\Http\Controllers\Decoration_orderController;
-
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\Love_reactController;
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\SubscribeController;
+use App\Http\Controllers\Saved_postController;
+use App\Http\Controllers\Follow_vendorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -61,6 +66,12 @@ Route::middleware('auth:api')->group(function(){
     Route::resource('photography_orders', Photography_orderController::class);
     Route::resource('music_services', Music_serviceController::class);
     Route::resource('music_orders', Music_orderController::class);
+    Route::resource('posts', PostController::class);
+    Route::resource('love_reacts', Love_reactController::class);
+    Route::resource('comments', CommentController::class);
+    Route::resource('subscribes', SubscribeController::class);
+    Route::resource('saved_posts', Saved_postController::class);
+    Route::resource('follow_vendors', Follow_vendorController::class);
 
 });
 
